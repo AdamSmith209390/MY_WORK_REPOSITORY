@@ -187,3 +187,44 @@ This project is for educational purposes and personal skill development.
 ---
 
 *This repository demonstrates practical application of professional software development practices including version control, collaborative workflows, and full-stack application architecture.*
+
+
+Step 1: Test the Frontend First
+powershell# Navigate to the frontend folder
+cd K:\AU_GIT_REPOSITORY\MY_WORK_REPOSITORY\Project_001_Full_Stack_App\frontend
+
+# Open the HTML file in your browser
+start index.html
+This should open your web page in your default browser. You should see:
+
+A purple gradient background
+White container with your app
+"Click Me!" button
+"Get Backend Data" button (if you're on the feature branch)
+
+Try clicking the buttons and see what happens!
+Step 2: Test the Backend
+Open a new PowerShell window (keep the first one open) and run:
+powershell# Navigate to backend folder
+cd K:\AU_GIT_REPOSITORY\MY_WORK_REPOSITORY\Project_001_Full_Stack_App\backend
+
+# First, let's see if you have Flask installed
+pip list | findstr Flask
+
+# If Flask isn't installed, install the requirements
+pip install -r requirements.txt
+
+# Run the Flask server
+python app.py
+The backend should start and show something like:
+Starting Flask backend server...
+* Running on all addresses (0.0.0.0)
+* Running on http://127.0.0.1:5000
+* Running on http://192.168.x.x:5000
+Step 3: Test the API
+In your browser, go to:
+
+http://localhost:5000 - Should show a JSON welcome message
+http://localhost:5000/api/data - Should show sample data
+http://localhost:5000/api/health - Should show health status
+
