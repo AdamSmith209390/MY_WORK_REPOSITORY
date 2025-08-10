@@ -4,16 +4,445 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Full Stack App</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #4a5568;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #718096;
+            margin-bottom: 30px;
+        }
+        
+        .section {
+            margin: 25px 0;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: #f7fafc;
+        }
+        
+        button {
+            background: #4299e1;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #3182ce;
+        }
+        
+        .success {
+            color: #38a169;
+            font-weight: bold;
+        }
+        
+        .error {
+            color: #e53e3e;
+            font-weight: bold;
+        }
+        
+        .info {
+            background: #ebf8ff;
+            border: 1px solid #90cdf4;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cbd5e0;
+            border-radius: 4px;
+            margin: 5px 0;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        
+        .form-group {
+            margin: 15px 0;
+        }
+        
+        .user-list {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 10px 0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .user-item {
+            padding: 8px;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .connection-status {
+            text-align: center;
+            padding: 10px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        
+        .connected {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+        
+        .disconnected {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>Welcome to My Full Stack App!</h1>
-        <p>Frontend connected to backend</p>
-        <button id="clickBtn">Click Me!</button>
-        <p id="message"></p>
-        <div id="data-display"></div>
+        <h1>🚀 My Full Stack App</h1>
+        <p class="subtitle">Frontend connected to Python Flask Backend with SQLite Database</p>
+        
+        <!-- Connection Status -->
+        <div id="connection-status" class="connection-status disconnected">
+            🔌 Checking backend connection...
+        </div>
+        
+        <!-- Backend API Test -->
+        <div class="section">
+            <h2>🔗 Backend Connection Test</h2>
+            <button onclick="testBackendConnection()">Test Backend</button>
+            <button onclick="getRandomData()">Get Random Data</button>
+            <div id="backend-response" class="info" style="display: none;"></div>
+        </div>
+        
+        <!-- Users Management -->
+        <div class="section">
+            <h2>👥 Users Management</h2>
+            <button onclick="loadUsers()">Load All Users</button>
+            <div id="users-display"></div>
+            
+            <h3>Add New User</h3>
+            <div class="form-group">
+                <input type="text" id="new-user-name" placeholder="Full Name">
+                <input type="email" id="new-user-email" placeholder="Email Address">
+                <button onclick="addNewUser()">Add User</button>
+            </div>
+            <div id="add-user-result"></div>
+        </div>
+        
+        <!-- Contact Form -->
+        <div class="section">
+            <h2>📞 Contact Form</h2>
+            <div class="form-group">
+                <input type="text" id="contact-name" placeholder="Your Name">
+                <input type="email" id="contact-email" placeholder="Your Email">
+                <textarea id="contact-message" placeholder="Your Message" rows="4"></textarea>
+                <button onclick="submitContact()">Send Message</button>
+            </div>
+            <div id="contact-result"></div>
+            
+            <h3>View Contact Submissions</h3>
+            <button onclick="loadContacts()">Load All Contacts</button>
+            <div id="contacts-display"></div>
+        </div>
+        
+        <!-- Database Info -->
+        <div class="section">
+            <h2>🗄️ Database Information</h2>
+            <button onclick="getDatabaseInfo()">Load Database Info</button>
+            <div id="database-info"></div>
+        </div>
     </div>
-    <script src="script.js"></script>
+    
+    <script>
+        const API_BASE_URL = 'http://localhost:5000';
+        
+        // Check backend connection on page load
+        window.addEventListener('load', function() {
+            testBackendConnection();
+        });
+        
+        async function testBackendConnection() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/health`);
+                const data = await response.json();
+                
+                const statusDiv = document.getElementById('connection-status');
+                const responseDiv = document.getElementById('backend-response');
+                
+                if (response.ok && data.status === 'healthy') {
+                    statusDiv.className = 'connection-status connected';
+                    statusDiv.innerHTML = '✅ Backend Connected Successfully';
+                    responseDiv.innerHTML = `
+                        <strong>Backend Status:</strong> ${data.status}<br>
+                        <strong>Service:</strong> ${data.service}<br>
+                        <strong>Version:</strong> ${data.version}<br>
+                        <strong>Database:</strong> ${data.database}
+                    `;
+                    responseDiv.style.display = 'block';
+                } else {
+                    throw new Error('Backend health check failed');
+                }
+            } catch (error) {
+                const statusDiv = document.getElementById('connection-status');
+                statusDiv.className = 'connection-status disconnected';
+                statusDiv.innerHTML = '❌ Backend Connection Failed';
+                console.error('Backend connection error:', error);
+            }
+        }
+        
+        async function getRandomData() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/data`);
+                const data = await response.json();
+                
+                const responseDiv = document.getElementById('backend-response');
+                responseDiv.innerHTML = `
+                    <strong>Random Data Response:</strong><br>
+                    User ID: ${data.user_id}<br>
+                    Session: ${data.session_id}<br>
+                    Random Number: ${data.random_number}<br>
+                    Message: ${data.message}
+                `;
+                responseDiv.style.display = 'block';
+            } catch (error) {
+                document.getElementById('backend-response').innerHTML = 
+                    `<span class="error">Error: ${error.message}</span>`;
+            }
+        }
+        
+        async function loadUsers() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/users`);
+                const data = await response.json();
+                
+                const usersDiv = document.getElementById('users-display');
+                
+                if (data.status === 'success') {
+                    let html = `<div class="success">✅ Found ${data.total_users} users</div>`;
+                    html += '<div class="user-list">';
+                    
+                    data.users.forEach(user => {
+                        html += `
+                            <div class="user-item">
+                                <span><strong>${user.name}</strong> (${user.email})</span>
+                                <span>ID: ${user.id}</span>
+                            </div>
+                        `;
+                    });
+                    
+                    html += '</div>';
+                    usersDiv.innerHTML = html;
+                } else {
+                    usersDiv.innerHTML = `<div class="error">❌ ${data.message}</div>`;
+                }
+            } catch (error) {
+                document.getElementById('users-display').innerHTML = 
+                    `<div class="error">❌ Error: ${error.message}</div>`;
+            }
+        }
+        
+        async function addNewUser() {
+            const name = document.getElementById('new-user-name').value.trim();
+            const email = document.getElementById('new-user-email').value.trim();
+            
+            if (!name || !email) {
+                document.getElementById('add-user-result').innerHTML = 
+                    '<div class="error">❌ Please fill in both name and email</div>';
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/users`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ name, email })
+                });
+                
+                const data = await response.json();
+                const resultDiv = document.getElementById('add-user-result');
+                
+                if (data.status === 'success') {
+                    resultDiv.innerHTML = `<div class="success">✅ ${data.message} (ID: ${data.user_id})</div>`;
+                    document.getElementById('new-user-name').value = '';
+                    document.getElementById('new-user-email').value = '';
+                    // Refresh user list
+                    loadUsers();
+                } else {
+                    resultDiv.innerHTML = `<div class="error">❌ ${data.message}</div>`;
+                }
+            } catch (error) {
+                document.getElementById('add-user-result').innerHTML = 
+                    `<div class="error">❌ Error: ${error.message}</div>`;
+            }
+        }
+        
+        async function submitContact() {
+            const name = document.getElementById('contact-name').value.trim();
+            const email = document.getElementById('contact-email').value.trim();
+            const message = document.getElementById('contact-message').value.trim();
+            
+            if (!name || !email || !message) {
+                document.getElementById('contact-result').innerHTML = 
+                    '<div class="error">❌ Please fill in all fields</div>';
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/contacts`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ name, email, message })
+                });
+                
+                const data = await response.json();
+                const resultDiv = document.getElementById('contact-result');
+                
+                if (data.status === 'success') {
+                    resultDiv.innerHTML = `<div class="success">✅ ${data.message} (ID: ${data.contact_id})</div>`;
+                    document.getElementById('contact-name').value = '';
+                    document.getElementById('contact-email').value = '';
+                    document.getElementById('contact-message').value = '';
+                } else {
+                    resultDiv.innerHTML = `<div class="error">❌ ${data.message}</div>`;
+                }
+            } catch (error) {
+                document.getElementById('contact-result').innerHTML = 
+                    `<div class="error">❌ Error: ${error.message}</div>`;
+            }
+        }
+        
+        async function loadContacts() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/contacts`);
+                const data = await response.json();
+                
+                const contactsDiv = document.getElementById('contacts-display');
+                
+                if (data.status === 'success') {
+                    if (data.contacts.length > 0) {
+                        let html = `<div class="success">✅ Found ${data.total_contacts} contact submissions</div>`;
+                        html += '<div class="user-list">';
+                        
+                        data.contacts.forEach(contact => {
+                            html += `
+                                <div class="user-item">
+                                    <div>
+                                        <strong>${contact.name}</strong> (${contact.email})<br>
+                                        <small>${contact.message.substring(0, 100)}...</small>
+                                    </div>
+                                    <div>
+                                        <small>ID: ${contact.contact_id}</small>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        
+                        html += '</div>';
+                        contactsDiv.innerHTML = html;
+                    } else {
+                        contactsDiv.innerHTML = '<div class="info">📭 No contact submissions yet</div>';
+                    }
+                } else {
+                    contactsDiv.innerHTML = `<div class="error">❌ ${data.message}</div>`;
+                }
+            } catch (error) {
+                document.getElementById('contacts-display').innerHTML = 
+                    `<div class="error">❌ Error: ${error.message}</div>`;
+            }
+        }
+        
+        async function getDatabaseInfo() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/database-info`);
+                const data = await response.json();
+                
+                const dbInfoDiv = document.getElementById('database-info');
+                
+                if (data.status === 'success') {
+                    const info = data.database_info;
+                    let html = `
+                        <div class="success">✅ Database Connected</div>
+                        <div class="info">
+                            <strong>Database File:</strong> ${info.database_file}<br>
+                            <strong>File Exists:</strong> ${info.file_exists}<br>
+                            <strong>Total Tables:</strong> ${info.tables.length}
+                        </div>
+                        <h4>Table Summary:</h4>
+                        <div class="user-list">
+                    `;
+                    
+                    info.tables.forEach(table => {
+                        html += `
+                            <div class="user-item">
+                                <span><strong>${table.name}</strong></span>
+                                <span>${table.row_count} rows</span>
+                            </div>
+                        `;
+                    });
+                    
+                    html += '</div>';
+                    dbInfoDiv.innerHTML = html;
+                } else {
+                    dbInfoDiv.innerHTML = `<div class="error">❌ ${data.message}</div>`;
+                }
+            } catch (error) {
+                document.getElementById('database-info').innerHTML = 
+                    `<div class="error">❌ Error: ${error.message}</div>`;
+            }
+        }
+        
+        // Utility function to show loading state
+        function showLoading(elementId, message = 'Loading...') {
+            document.getElementById(elementId).innerHTML = `<div class="info">⏳ ${message}</div>`;
+        }
+        
+        // Add enter key support for forms
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const target = e.target;
+                if (target.id === 'new-user-name' || target.id === 'new-user-email') {
+                    addNewUser();
+                } else if (target.id === 'contact-name' || target.id === 'contact-email') {
+                    // Don't submit on enter for these, let user type in message field
+                    return;
+                }
+            }
+        });
+    </script>
 </body>
 </html>
