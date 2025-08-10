@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, request
 from datetime import datetime
 import random
 
@@ -33,3 +33,29 @@ def health_check():
 if __name__ == '__main__':
     print("Starting Flask backend server...")
     app.run(debug=True, host='0.0.0.0', port=5000)
+
+@app.route('/api/contact', methods=['POST'])
+def handle_contact():
+    try:
+        data = request.get_json()
+        name = data.get('name')
+        email = data.get('email')
+        message = data.get('message')
+        
+        # Simulate processing the contact form
+        response = {
+            "status": "success",
+            "message": f"Thank you {name}! Your message has been received.",
+            "contact_id": f"CONTACT_{random.randint(1000, 9999)}",
+            "timestamp": datetime.now().isoformat(),
+            "email": email
+        }
+        
+        return jsonify(response), 200
+        
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": "Failed to process contact form",
+            "error": str(e)
+        }), 400
