@@ -28,4 +28,17 @@ document.addEventListener('DOMContentLoaded', function() {
             <p><strong>Session:</strong> ${Math.random().toString(36).substring(7)}</p>
         `;
     });
+
+    // Add backend data button functionality
+    const dataBtn = document.getElementById('dataBtn');
+    dataBtn.addEventListener('click', function() {
+        dataDisplay.innerHTML = `
+            <h3>Simulated API Response:</h3>
+            <p><strong>Status:</strong> Connected to Backend</p>
+            <p><strong>API Version:</strong> v1.0</p>
+            <p><strong>Response Time:</strong> ${Math.random() * 100}ms</p>
+            <p><strong>Server:</strong> Flask Development Server</p>
+            <p><strong>Endpoint:</strong> /api/data</p>
+        `;
+    });
 });
