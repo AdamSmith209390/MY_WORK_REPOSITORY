@@ -3,18 +3,461 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Full Stack App</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Full Stack App - Enhanced Frontend</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 300;
+        }
+
+        .content {
+            padding: 2rem;
+        }
+
+        .section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            background: #f8f9fa;
+        }
+
+        .section h2 {
+            margin-top: 0;
+            color: #333;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 0.5rem;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .data-display {
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 1rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .status {
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-weight: bold;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .status.loading {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .user-item, .contact-item {
+            background: white;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>Welcome to My Full Stack App!</h1>
-        <p>Frontend connected to backend</p>
-        <button id="clickBtn">Click Me!</button>
-        <button id="dataBtn">Get Backend Data</button>
-        <p id="message"></p>
-        <div id="data-display"></div>
+        <div class="header">
+            <h1>🚀 Full Stack Application</h1>
+            <p>Frontend connected to Flask Backend API</p>
+        </div>
+        
+        <div class="content">
+            <!-- API Testing Section -->
+            <div class="section">
+                <h2>🔌 API Connection Testing</h2>
+                <div class="button-group">
+                    <button onclick="testHealth()">Health Check</button>
+                    <button onclick="getRandomData()">Get Random Data</button>
+                    <button onclick="getDatabaseInfo()">Database Info</button>
+                </div>
+                <div id="api-status" class="data-display"></div>
+            </div>
+
+            <div class="grid">
+                <!-- User Management Section -->
+                <div class="section">
+                    <h2>👥 User Management</h2>
+                    
+                    <!-- Add User Form -->
+                    <div class="form-group">
+                        <label for="userName">Name:</label>
+                        <input type="text" id="userName" placeholder="Enter user name">
+                    </div>
+                    <div class="form-group">
+                        <label for="userEmail">Email:</label>
+                        <input type="email" id="userEmail" placeholder="Enter email address">
+                    </div>
+                    <button onclick="addUser()">Add User</button>
+                    <button onclick="loadUsers()">Load All Users</button>
+                    
+                    <div id="users-display" class="data-display"></div>
+                </div>
+
+                <!-- Contact Form Section -->
+                <div class="section">
+                    <h2>📧 Contact Form</h2>
+                    
+                    <div class="form-group">
+                        <label for="contactName">Name:</label>
+                        <input type="text" id="contactName" placeholder="Your name">
+                    </div>
+                    <div class="form-group">
+                        <label for="contactEmail">Email:</label>
+                        <input type="email" id="contactEmail" placeholder="Your email">
+                    </div>
+                    <div class="form-group">
+                        <label for="contactMessage">Message:</label>
+                        <textarea id="contactMessage" placeholder="Your message..."></textarea>
+                    </div>
+                    <button onclick="submitContact()">Submit Contact</button>
+                    <button onclick="loadContacts()">Load All Contacts</button>
+                    
+                    <div id="contacts-display" class="data-display"></div>
+                </div>
+            </div>
+        </div>
     </div>
-    <script src="script.js"></script>
+
+    <script>
+        const API_BASE = 'http://localhost:5000';
+
+        // Utility function to display status messages
+        function showStatus(elementId, message, type = 'loading') {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+
+        // Utility function to make API calls
+        async function apiCall(endpoint, options = {}) {
+            try {
+                const response = await fetch(`${API_BASE}${endpoint}`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...options.headers
+                    },
+                    ...options
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                return await response.json();
+            } catch (error) {
+                console.error('API call failed:', error);
+                throw error;
+            }
+        }
+
+        // API Testing Functions
+        async function testHealth() {
+            showStatus('api-status', 'Testing health endpoint...', 'loading');
+            try {
+                const data = await apiCall('/api/health');
+                document.getElementById('api-status').innerHTML = `
+                    <div class="status success">✅ Backend Connected!</div>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                showStatus('api-status', `❌ Health check failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function getRandomData() {
+            showStatus('api-status', 'Fetching random data...', 'loading');
+            try {
+                const data = await apiCall('/api/data');
+                document.getElementById('api-status').innerHTML = `
+                    <div class="status success">📊 Random Data Retrieved!</div>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                showStatus('api-status', `❌ Failed to get data: ${error.message}`, 'error');
+            }
+        }
+
+        async function getDatabaseInfo() {
+            showStatus('api-status', 'Getting database info...', 'loading');
+            try {
+                const data = await apiCall('/api/database-info');
+                document.getElementById('api-status').innerHTML = `
+                    <div class="status success">🗄️ Database Info Retrieved!</div>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                showStatus('api-status', `❌ Failed to get database info: ${error.message}`, 'error');
+            }
+        }
+
+        // User Management Functions
+        async function addUser() {
+            const name = document.getElementById('userName').value.trim();
+            const email = document.getElementById('userEmail').value.trim();
+            
+            if (!name || !email) {
+                showStatus('users-display', '❌ Please fill in both name and email', 'error');
+                return;
+            }
+            
+            showStatus('users-display', 'Adding user...', 'loading');
+            
+            try {
+                const data = await apiCall('/api/users', {
+                    method: 'POST',
+                    body: JSON.stringify({ name, email })
+                });
+                
+                showStatus('users-display', `✅ ${data.message}`, 'success');
+                
+                // Clear form
+                document.getElementById('userName').value = '';
+                document.getElementById('userEmail').value = '';
+                
+                // Auto-reload users
+                setTimeout(loadUsers, 1000);
+                
+            } catch (error) {
+                showStatus('users-display', `❌ Failed to add user: ${error.message}`, 'error');
+            }
+        }
+
+        async function loadUsers() {
+            showStatus('users-display', 'Loading users...', 'loading');
+            try {
+                const data = await apiCall('/api/users');
+                
+                let html = `<div class="status success">👥 ${data.total_users} Users Found</div>`;
+                
+                if (data.users && data.users.length > 0) {
+                    data.users.forEach(user => {
+                        html += `
+                            <div class="user-item">
+                                <strong>${user.name}</strong><br>
+                                📧 ${user.email}<br>
+                                🕐 ${new Date(user.created_at).toLocaleString()}
+                            </div>
+                        `;
+                    });
+                } else {
+                    html += '<p>No users found.</p>';
+                }
+                
+                document.getElementById('users-display').innerHTML = html;
+                
+            } catch (error) {
+                showStatus('users-display', `❌ Failed to load users: ${error.message}`, 'error');
+            }
+        }
+
+        // Contact Functions
+        async function submitContact() {
+            const name = document.getElementById('contactName').value.trim();
+            const email = document.getElementById('contactEmail').value.trim();
+            const message = document.getElementById('contactMessage').value.trim();
+            
+            if (!name || !email || !message) {
+                showStatus('contacts-display', '❌ Please fill in all fields', 'error');
+                return;
+            }
+            
+            showStatus('contacts-display', 'Submitting contact...', 'loading');
+            
+            try {
+                const data = await apiCall('/api/contacts', {
+                    method: 'POST',
+                    body: JSON.stringify({ name, email, message })
+                });
+                
+                showStatus('contacts-display', `✅ ${data.message}`, 'success');
+                
+                // Clear form
+                document.getElementById('contactName').value = '';
+                document.getElementById('contactEmail').value = '';
+                document.getElementById('contactMessage').value = '';
+                
+                // Auto-reload contacts
+                setTimeout(loadContacts, 1000);
+                
+            } catch (error) {
+                showStatus('contacts-display', `❌ Failed to submit contact: ${error.message}`, 'error');
+            }
+        }
+
+        async function loadContacts() {
+            showStatus('contacts-display', 'Loading contacts...', 'loading');
+            try {
+                const data = await apiCall('/api/contacts');
+                
+                let html = `<div class="status success">📧 ${data.total_contacts} Contacts Found</div>`;
+                
+                if (data.contacts && data.contacts.length > 0) {
+                    data.contacts.forEach(contact => {
+                        html += `
+                            <div class="contact-item">
+                                <strong>${contact.name}</strong><br>
+                                📧 ${contact.email}<br>
+                                💬 ${contact.message}<br>
+                                🕐 ${new Date(contact.submitted_at).toLocaleString()}
+                            </div>
+                        `;
+                    });
+                } else {
+                    html += '<p>No contacts found.</p>';
+                }
+                
+                document.getElementById('contacts-display').innerHTML = html;
+                
+            } catch (error) {
+                showStatus('contacts-display', `❌ Failed to load contacts: ${error.message}`, 'error');
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Test connection on load
+            testHealth();
+            
+            // Load initial data
+            loadUsers();
+            loadContacts();
+        });
+    </script>
 </body>
 </html>
