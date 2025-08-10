@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Full Stack App</title>
+    <title>Full Stack App - Enhanced Frontend</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -11,437 +11,452 @@
             padding: 20px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            color: #333;
         }
-        
+
         .container {
-            max-width: 800px;
+            max-width: 1200px;
             margin: 0 auto;
             background: white;
-            padding: 30px;
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
         }
-        
-        h1 {
+
+        .header {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 2rem;
             text-align: center;
-            color: #4a5568;
-            margin-bottom: 10px;
         }
-        
-        .subtitle {
-            text-align: center;
-            color: #718096;
-            margin-bottom: 30px;
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 300;
         }
-        
+
+        .content {
+            padding: 2rem;
+        }
+
         .section {
-            margin: 25px 0;
-            padding: 20px;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            background: #f7fafc;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            background: #f8f9fa;
         }
-        
+
+        .section h2 {
+            margin-top: 0;
+            color: #333;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 0.5rem;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
         button {
-            background: #4299e1;
+            background: linear-gradient(45deg, #667eea, #764ba2);
             color: white;
             border: none;
             padding: 12px 24px;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 16px;
-            margin: 5px;
-            transition: background 0.3s;
+            transition: all 0.3s ease;
+            flex: 1;
+            min-width: 150px;
         }
-        
+
         button:hover {
-            background: #3182ce;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
-        
-        .success {
-            color: #38a169;
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
             font-weight: bold;
+            color: #333;
         }
-        
-        .error {
-            color: #e53e3e;
-            font-weight: bold;
-        }
-        
-        .info {
-            background: #ebf8ff;
-            border: 1px solid #90cdf4;
-            padding: 15px;
-            border-radius: 6px;
-            margin: 10px 0;
-        }
-        
+
         input, textarea {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #cbd5e0;
-            border-radius: 4px;
-            margin: 5px 0;
-            font-size: 14px;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
             box-sizing: border-box;
         }
-        
-        .form-group {
-            margin: 15px 0;
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
         }
-        
-        .user-list {
+
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .data-display {
             background: white;
-            border: 1px solid #e2e8f0;
-            border-radius: 6px;
-            padding: 15px;
-            margin: 10px 0;
-            max-height: 300px;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 1rem;
+            max-height: 400px;
             overflow-y: auto;
         }
-        
-        .user-item {
-            padding: 8px;
-            border-bottom: 1px solid #f1f5f9;
-            display: flex;
-            justify-content: space-between;
-        }
-        
-        .connection-status {
-            text-align: center;
-            padding: 10px;
-            border-radius: 6px;
-            margin: 10px 0;
+
+        .status {
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
             font-weight: bold;
         }
-        
-        .connected {
-            background: #c6f6d5;
-            color: #22543d;
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
         }
-        
-        .disconnected {
-            background: #fed7d7;
-            color: #742a2a;
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .status.loading {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .user-item, .contact-item {
+            background: white;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            .button-group {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🚀 My Full Stack App</h1>
-        <p class="subtitle">Frontend connected to Python Flask Backend with SQLite Database</p>
-        
-        <!-- Connection Status -->
-        <div id="connection-status" class="connection-status disconnected">
-            🔌 Checking backend connection...
+        <div class="header">
+            <h1>🚀 Full Stack Application</h1>
+            <p>Frontend connected to Flask Backend API</p>
         </div>
         
-        <!-- Backend API Test -->
-        <div class="section">
-            <h2>🔗 Backend Connection Test</h2>
-            <button onclick="testBackendConnection()">Test Backend</button>
-            <button onclick="getRandomData()">Get Random Data</button>
-            <div id="backend-response" class="info" style="display: none;"></div>
-        </div>
-        
-        <!-- Users Management -->
-        <div class="section">
-            <h2>👥 Users Management</h2>
-            <button onclick="loadUsers()">Load All Users</button>
-            <div id="users-display"></div>
-            
-            <h3>Add New User</h3>
-            <div class="form-group">
-                <input type="text" id="new-user-name" placeholder="Full Name">
-                <input type="email" id="new-user-email" placeholder="Email Address">
-                <button onclick="addNewUser()">Add User</button>
+        <div class="content">
+            <!-- API Testing Section -->
+            <div class="section">
+                <h2>🔌 API Connection Testing</h2>
+                <div class="button-group">
+                    <button onclick="testHealth()">Health Check</button>
+                    <button onclick="getRandomData()">Get Random Data</button>
+                    <button onclick="getDatabaseInfo()">Database Info</button>
+                </div>
+                <div id="api-status" class="data-display"></div>
             </div>
-            <div id="add-user-result"></div>
-        </div>
-        
-        <!-- Contact Form -->
-        <div class="section">
-            <h2>📞 Contact Form</h2>
-            <div class="form-group">
-                <input type="text" id="contact-name" placeholder="Your Name">
-                <input type="email" id="contact-email" placeholder="Your Email">
-                <textarea id="contact-message" placeholder="Your Message" rows="4"></textarea>
-                <button onclick="submitContact()">Send Message</button>
+
+            <div class="grid">
+                <!-- User Management Section -->
+                <div class="section">
+                    <h2>👥 User Management</h2>
+                    
+                    <!-- Add User Form -->
+                    <div class="form-group">
+                        <label for="userName">Name:</label>
+                        <input type="text" id="userName" placeholder="Enter user name">
+                    </div>
+                    <div class="form-group">
+                        <label for="userEmail">Email:</label>
+                        <input type="email" id="userEmail" placeholder="Enter email address">
+                    </div>
+                    <button onclick="addUser()">Add User</button>
+                    <button onclick="loadUsers()">Load All Users</button>
+                    
+                    <div id="users-display" class="data-display"></div>
+                </div>
+
+                <!-- Contact Form Section -->
+                <div class="section">
+                    <h2>📧 Contact Form</h2>
+                    
+                    <div class="form-group">
+                        <label for="contactName">Name:</label>
+                        <input type="text" id="contactName" placeholder="Your name">
+                    </div>
+                    <div class="form-group">
+                        <label for="contactEmail">Email:</label>
+                        <input type="email" id="contactEmail" placeholder="Your email">
+                    </div>
+                    <div class="form-group">
+                        <label for="contactMessage">Message:</label>
+                        <textarea id="contactMessage" placeholder="Your message..."></textarea>
+                    </div>
+                    <button onclick="submitContact()">Submit Contact</button>
+                    <button onclick="loadContacts()">Load All Contacts</button>
+                    
+                    <div id="contacts-display" class="data-display"></div>
+                </div>
             </div>
-            <div id="contact-result"></div>
-            
-            <h3>View Contact Submissions</h3>
-            <button onclick="loadContacts()">Load All Contacts</button>
-            <div id="contacts-display"></div>
-        </div>
-        
-        <!-- Database Info -->
-        <div class="section">
-            <h2>🗄️ Database Information</h2>
-            <button onclick="getDatabaseInfo()">Load Database Info</button>
-            <div id="database-info"></div>
         </div>
     </div>
-    
+
     <script>
-        const API_BASE_URL = 'http://localhost:5000';
-        
-        // Check backend connection on page load
-        window.addEventListener('load', function() {
-            testBackendConnection();
-        });
-        
-        async function testBackendConnection() {
+        const API_BASE = 'http://localhost:5000';
+
+        // Utility function to display status messages
+        function showStatus(elementId, message, type = 'loading') {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+
+        // Utility function to make API calls
+        async function apiCall(endpoint, options = {}) {
             try {
-                const response = await fetch(`${API_BASE_URL}/api/health`);
-                const data = await response.json();
+                const response = await fetch(`${API_BASE}${endpoint}`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...options.headers
+                    },
+                    ...options
+                });
                 
-                const statusDiv = document.getElementById('connection-status');
-                const responseDiv = document.getElementById('backend-response');
-                
-                if (response.ok && data.status === 'healthy') {
-                    statusDiv.className = 'connection-status connected';
-                    statusDiv.innerHTML = '✅ Backend Connected Successfully';
-                    responseDiv.innerHTML = `
-                        <strong>Backend Status:</strong> ${data.status}<br>
-                        <strong>Service:</strong> ${data.service}<br>
-                        <strong>Version:</strong> ${data.version}<br>
-                        <strong>Database:</strong> ${data.database}
-                    `;
-                    responseDiv.style.display = 'block';
-                } else {
-                    throw new Error('Backend health check failed');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
+                
+                return await response.json();
             } catch (error) {
-                const statusDiv = document.getElementById('connection-status');
-                statusDiv.className = 'connection-status disconnected';
-                statusDiv.innerHTML = '❌ Backend Connection Failed';
-                console.error('Backend connection error:', error);
+                console.error('API call failed:', error);
+                throw error;
             }
         }
-        
-        async function getRandomData() {
+
+        // API Testing Functions
+        async function testHealth() {
+            showStatus('api-status', 'Testing health endpoint...', 'loading');
             try {
-                const response = await fetch(`${API_BASE_URL}/api/data`);
-                const data = await response.json();
-                
-                const responseDiv = document.getElementById('backend-response');
-                responseDiv.innerHTML = `
-                    <strong>Random Data Response:</strong><br>
-                    User ID: ${data.user_id}<br>
-                    Session: ${data.session_id}<br>
-                    Random Number: ${data.random_number}<br>
-                    Message: ${data.message}
+                const data = await apiCall('/api/health');
+                document.getElementById('api-status').innerHTML = `
+                    <div class="status success">✅ Backend Connected!</div>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
                 `;
-                responseDiv.style.display = 'block';
             } catch (error) {
-                document.getElementById('backend-response').innerHTML = 
-                    `<span class="error">Error: ${error.message}</span>`;
+                showStatus('api-status', `❌ Health check failed: ${error.message}`, 'error');
             }
         }
-        
-        async function loadUsers() {
+
+        async function getRandomData() {
+            showStatus('api-status', 'Fetching random data...', 'loading');
             try {
-                const response = await fetch(`${API_BASE_URL}/api/users`);
-                const data = await response.json();
-                
-                const usersDiv = document.getElementById('users-display');
-                
-                if (data.status === 'success') {
-                    let html = `<div class="success">✅ Found ${data.total_users} users</div>`;
-                    html += '<div class="user-list">';
-                    
-                    data.users.forEach(user => {
-                        html += `
-                            <div class="user-item">
-                                <span><strong>${user.name}</strong> (${user.email})</span>
-                                <span>ID: ${user.id}</span>
-                            </div>
-                        `;
-                    });
-                    
-                    html += '</div>';
-                    usersDiv.innerHTML = html;
-                } else {
-                    usersDiv.innerHTML = `<div class="error">❌ ${data.message}</div>`;
-                }
+                const data = await apiCall('/api/data');
+                document.getElementById('api-status').innerHTML = `
+                    <div class="status success">📊 Random Data Retrieved!</div>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
             } catch (error) {
-                document.getElementById('users-display').innerHTML = 
-                    `<div class="error">❌ Error: ${error.message}</div>`;
+                showStatus('api-status', `❌ Failed to get data: ${error.message}`, 'error');
             }
         }
-        
-        async function addNewUser() {
-            const name = document.getElementById('new-user-name').value.trim();
-            const email = document.getElementById('new-user-email').value.trim();
+
+        async function getDatabaseInfo() {
+            showStatus('api-status', 'Getting database info...', 'loading');
+            try {
+                const data = await apiCall('/api/database-info');
+                document.getElementById('api-status').innerHTML = `
+                    <div class="status success">🗄️ Database Info Retrieved!</div>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                showStatus('api-status', `❌ Failed to get database info: ${error.message}`, 'error');
+            }
+        }
+
+        // User Management Functions
+        async function addUser() {
+            const name = document.getElementById('userName').value.trim();
+            const email = document.getElementById('userEmail').value.trim();
             
             if (!name || !email) {
-                document.getElementById('add-user-result').innerHTML = 
-                    '<div class="error">❌ Please fill in both name and email</div>';
+                showStatus('users-display', '❌ Please fill in both name and email', 'error');
                 return;
             }
             
+            showStatus('users-display', 'Adding user...', 'loading');
+            
             try {
-                const response = await fetch(`${API_BASE_URL}/api/users`, {
+                const data = await apiCall('/api/users', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
                     body: JSON.stringify({ name, email })
                 });
                 
-                const data = await response.json();
-                const resultDiv = document.getElementById('add-user-result');
+                showStatus('users-display', `✅ ${data.message}`, 'success');
                 
-                if (data.status === 'success') {
-                    resultDiv.innerHTML = `<div class="success">✅ ${data.message} (ID: ${data.user_id})</div>`;
-                    document.getElementById('new-user-name').value = '';
-                    document.getElementById('new-user-email').value = '';
-                    // Refresh user list
-                    loadUsers();
-                } else {
-                    resultDiv.innerHTML = `<div class="error">❌ ${data.message}</div>`;
-                }
+                // Clear form
+                document.getElementById('userName').value = '';
+                document.getElementById('userEmail').value = '';
+                
+                // Auto-reload users
+                setTimeout(loadUsers, 1000);
+                
             } catch (error) {
-                document.getElementById('add-user-result').innerHTML = 
-                    `<div class="error">❌ Error: ${error.message}</div>`;
+                showStatus('users-display', `❌ Failed to add user: ${error.message}`, 'error');
             }
         }
-        
-        async function submitContact() {
-            const name = document.getElementById('contact-name').value.trim();
-            const email = document.getElementById('contact-email').value.trim();
-            const message = document.getElementById('contact-message').value.trim();
-            
-            if (!name || !email || !message) {
-                document.getElementById('contact-result').innerHTML = 
-                    '<div class="error">❌ Please fill in all fields</div>';
-                return;
-            }
-            
+
+        async function loadUsers() {
+            showStatus('users-display', 'Loading users...', 'loading');
             try {
-                const response = await fetch(`${API_BASE_URL}/api/contacts`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ name, email, message })
-                });
+                const data = await apiCall('/api/users');
                 
-                const data = await response.json();
-                const resultDiv = document.getElementById('contact-result');
+                let html = `<div class="status success">👥 ${data.total_users} Users Found</div>`;
                 
-                if (data.status === 'success') {
-                    resultDiv.innerHTML = `<div class="success">✅ ${data.message} (ID: ${data.contact_id})</div>`;
-                    document.getElementById('contact-name').value = '';
-                    document.getElementById('contact-email').value = '';
-                    document.getElementById('contact-message').value = '';
-                } else {
-                    resultDiv.innerHTML = `<div class="error">❌ ${data.message}</div>`;
-                }
-            } catch (error) {
-                document.getElementById('contact-result').innerHTML = 
-                    `<div class="error">❌ Error: ${error.message}</div>`;
-            }
-        }
-        
-        async function loadContacts() {
-            try {
-                const response = await fetch(`${API_BASE_URL}/api/contacts`);
-                const data = await response.json();
-                
-                const contactsDiv = document.getElementById('contacts-display');
-                
-                if (data.status === 'success') {
-                    if (data.contacts.length > 0) {
-                        let html = `<div class="success">✅ Found ${data.total_contacts} contact submissions</div>`;
-                        html += '<div class="user-list">';
-                        
-                        data.contacts.forEach(contact => {
-                            html += `
-                                <div class="user-item">
-                                    <div>
-                                        <strong>${contact.name}</strong> (${contact.email})<br>
-                                        <small>${contact.message.substring(0, 100)}...</small>
-                                    </div>
-                                    <div>
-                                        <small>ID: ${contact.contact_id}</small>
-                                    </div>
-                                </div>
-                            `;
-                        });
-                        
-                        html += '</div>';
-                        contactsDiv.innerHTML = html;
-                    } else {
-                        contactsDiv.innerHTML = '<div class="info">📭 No contact submissions yet</div>';
-                    }
-                } else {
-                    contactsDiv.innerHTML = `<div class="error">❌ ${data.message}</div>`;
-                }
-            } catch (error) {
-                document.getElementById('contacts-display').innerHTML = 
-                    `<div class="error">❌ Error: ${error.message}</div>`;
-            }
-        }
-        
-        async function getDatabaseInfo() {
-            try {
-                const response = await fetch(`${API_BASE_URL}/api/database-info`);
-                const data = await response.json();
-                
-                const dbInfoDiv = document.getElementById('database-info');
-                
-                if (data.status === 'success') {
-                    const info = data.database_info;
-                    let html = `
-                        <div class="success">✅ Database Connected</div>
-                        <div class="info">
-                            <strong>Database File:</strong> ${info.database_file}<br>
-                            <strong>File Exists:</strong> ${info.file_exists}<br>
-                            <strong>Total Tables:</strong> ${info.tables.length}
-                        </div>
-                        <h4>Table Summary:</h4>
-                        <div class="user-list">
-                    `;
-                    
-                    info.tables.forEach(table => {
+                if (data.users && data.users.length > 0) {
+                    data.users.forEach(user => {
                         html += `
                             <div class="user-item">
-                                <span><strong>${table.name}</strong></span>
-                                <span>${table.row_count} rows</span>
+                                <strong>${user.name}</strong><br>
+                                📧 ${user.email}<br>
+                                🕐 ${new Date(user.created_at).toLocaleString()}
                             </div>
                         `;
                     });
-                    
-                    html += '</div>';
-                    dbInfoDiv.innerHTML = html;
                 } else {
-                    dbInfoDiv.innerHTML = `<div class="error">❌ ${data.message}</div>`;
+                    html += '<p>No users found.</p>';
                 }
+                
+                document.getElementById('users-display').innerHTML = html;
+                
             } catch (error) {
-                document.getElementById('database-info').innerHTML = 
-                    `<div class="error">❌ Error: ${error.message}</div>`;
+                showStatus('users-display', `❌ Failed to load users: ${error.message}`, 'error');
             }
         }
-        
-        // Utility function to show loading state
-        function showLoading(elementId, message = 'Loading...') {
-            document.getElementById(elementId).innerHTML = `<div class="info">⏳ ${message}</div>`;
+
+        // Contact Functions
+        async function submitContact() {
+            const name = document.getElementById('contactName').value.trim();
+            const email = document.getElementById('contactEmail').value.trim();
+            const message = document.getElementById('contactMessage').value.trim();
+            
+            if (!name || !email || !message) {
+                showStatus('contacts-display', '❌ Please fill in all fields', 'error');
+                return;
+            }
+            
+            showStatus('contacts-display', 'Submitting contact...', 'loading');
+            
+            try {
+                const data = await apiCall('/api/contacts', {
+                    method: 'POST',
+                    body: JSON.stringify({ name, email, message })
+                });
+                
+                showStatus('contacts-display', `✅ ${data.message}`, 'success');
+                
+                // Clear form
+                document.getElementById('contactName').value = '';
+                document.getElementById('contactEmail').value = '';
+                document.getElementById('contactMessage').value = '';
+                
+                // Auto-reload contacts
+                setTimeout(loadContacts, 1000);
+                
+            } catch (error) {
+                showStatus('contacts-display', `❌ Failed to submit contact: ${error.message}`, 'error');
+            }
         }
-        
-        // Add enter key support for forms
-        document.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                const target = e.target;
-                if (target.id === 'new-user-name' || target.id === 'new-user-email') {
-                    addNewUser();
-                } else if (target.id === 'contact-name' || target.id === 'contact-email') {
-                    // Don't submit on enter for these, let user type in message field
-                    return;
+
+        async function loadContacts() {
+            showStatus('contacts-display', 'Loading contacts...', 'loading');
+            try {
+                const data = await apiCall('/api/contacts');
+                
+                let html = `<div class="status success">📧 ${data.total_contacts} Contacts Found</div>`;
+                
+                if (data.contacts && data.contacts.length > 0) {
+                    data.contacts.forEach(contact => {
+                        html += `
+                            <div class="contact-item">
+                                <strong>${contact.name}</strong><br>
+                                📧 ${contact.email}<br>
+                                💬 ${contact.message}<br>
+                                🕐 ${new Date(contact.submitted_at).toLocaleString()}
+                            </div>
+                        `;
+                    });
+                } else {
+                    html += '<p>No contacts found.</p>';
                 }
+                
+                document.getElementById('contacts-display').innerHTML = html;
+                
+            } catch (error) {
+                showStatus('contacts-display', `❌ Failed to load contacts: ${error.message}`, 'error');
             }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Test connection on load
+            testHealth();
+            
+            // Load initial data
+            loadUsers();
+            loadContacts();
         });
     </script>
 </body>
